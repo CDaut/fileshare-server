@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fileserver</title>
+    <style>
+        body {
+            font-family: "Linux Biolinum";
+            color: #6d6d6d;
+            background-color: #1d1d1d;
+        }
+
+        h1 {
+            margin: auto;
+        }
+
+        .heading_container {
+            height: 5em;
+            -webkit-box-shadow: 2px 2px 3px -2px rgba(74, 74, 74, 1);
+            -moz-box-shadow: 2px 2px 3px -2px rgba(74, 74, 74, 1);
+            box-shadow: 2px 2px 3px -2px rgba(74, 74, 74, 1);
+            display: flex;
+            text-align: center;
+            justify-content: center;
+        }
+
+        .filecont {
+            width: 95%;
+            margin: 1em auto 1em auto;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            -webkit-box-shadow: 2px 2px 3px -2px rgba(74, 74, 74, 1);
+            -moz-box-shadow: 2px 2px 3px -2px rgba(74, 74, 74, 1);
+            box-shadow: 2px 2px 3px -2px rgba(74, 74, 74, 1);
+        }
+
+        .filelist {
+            align-content: center;
+        }
+
+        .filename {
+            font-size: 1.5em;
+            margin-left: 2em;
+        }
+
+        .wget_btn, .curl_btn, .url_button {
+            color: #d1d1d1;
+            height: 50%;
+            margin: 1.5em;
+            background-color: #3A7734;
+            border: none;
+            border-radius: 0.5em;
+            padding: 1em 2em 1em 2em;
+        }
+
+        .clipboard_shower {
+            position: fixed;
+            left: 0px;
+            right: 0px;
+            bottom: 0px;
+            width: 100%;
+            margin-left: 2em;
+            background-color: #1d1d1d;
+        }
+
+        .clipboard_indicator_text {
+            font-size: 1.4em;
+        }
+
+        .dropdown {
+            height: 50%;
+            margin-left: 2em;
+            align-self: center;
+        }
+
+    </style>
+</head>
+<body>
+<div class="heading_container">
+    <select class="dropdown" id="iface_selector">
+        {% for iface, address in ifaces.items() %}
+        <option value="{{address}}">{{iface}}: {{address}}</option>
+        {% endfor %}
+    </select>
+    <h1>File upload server</h1>
+</div>
+<ul class="filelist">
+    {% for file in files %}
+    <div class="filecont">
+        <p class="filename">{{file}}</p>
+        <button class="curl_btn" onclick="btnlistener('{{file}}', 'curl')">copy curl</button>
+        <button class="wget_btn" onclick="btnlistener('{{file}}', 'wget')">copy wget</button>
+        <button class="url_button" onclick="btnlistener('{{file}}', 'url')">copy url</button>
+    </div>
+    {% endfor %}
+</ul>
+<div class="clipboard_shower">
+    <p class="clipboard_indicator_text" id="clipboard">currently copied: </p>
+</div>
+</body>
+<script>
+    btnlistener = function (file, method) {
+        let p = document.getElementById("clipboard");
+        let str;
+        let selector = document.getElementById('iface_selector')
+        let ip = selector.options[selector.selectedIndex].value;
+
+
+        switch (method) {
+            case "curl":
+                str = "curl http://" + ip + "/" + file;
+                break;
+            case "wget":
+                str = "wget \"http://" + ip + "/" + file + "\"";
+                break;
+            case "url":
+                str = "http://" + ip + "/" + file;
+                break;
+            default:
+                str = "INVALID";
+                break;
+        }
+        p.innerText = "currently copied: " + str;
+        navigator.clipboard.writeText(str);
+    }
+</script>
+</html>
