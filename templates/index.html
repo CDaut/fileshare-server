@@ -104,19 +104,19 @@
     btnlistener = function (file, method) {
         let p = document.getElementById("clipboard");
         let str;
-        let selector = document.getElementById('iface_selector')
+        let selector = document.getElementById('iface_selector');
         let ip = selector.options[selector.selectedIndex].value;
-
+        let port = {{port}};
 
         switch (method) {
             case "curl":
-                str = "curl http://" + ip + "/" + file;
+                str = "curl http://" + ip + ":" + port + "/" + file;
                 break;
             case "wget":
-                str = "wget \"http://" + ip + "/" + file + "\"";
+                str = "wget \"http://" + ip + ":" + port + "/" + file + "\"";
                 break;
             case "url":
-                str = "http://" + ip + "/" + file;
+                str = "http://" + ip + ":" + port + "/" + file;
                 break;
             default:
                 str = "INVALID";
