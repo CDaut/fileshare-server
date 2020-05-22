@@ -31,7 +31,6 @@ def index():
                 for address in inet_addresses:
                     interface_dict[interface] = address['addr']
 
-    print(interface_dict)
     return render_template('index.html', files=files, ifaces=interface_dict)
 
 
